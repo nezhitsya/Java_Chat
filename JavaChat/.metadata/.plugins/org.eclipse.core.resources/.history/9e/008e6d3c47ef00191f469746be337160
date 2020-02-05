@@ -1,0 +1,92 @@
+package prac;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+import prac.Listener;
+// 닉네임 정하고 채팅방 입장하는 패널
+public class LoginPanel extends JPanel {
+	
+	private JTextField txtName;
+	private int profileNum = 0;
+	ImageIcon profileImage = getProfileImage();
+	JLabel lblProfile;
+
+	public LoginPanel(final AppFrame frame) {
+		
+		setBackground(new Color(248, 248, 255));
+		setLayout(null);
+		
+		JLabel lblTitle = new JLabel("DayTalk");
+		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitle.setFont(new Font("HY신명조", Font.BOLD, 34));
+		lblTitle.setBounds(84, 83, 276, 46);
+		add(lblTitle);
+		
+		txtName = new JTextField();
+		txtName.setText("\uB2C9\uB124\uC784");
+		txtName.setFont(new Font("중고딕", Font.PLAIN, 14));
+		txtName.setHorizontalAlignment(SwingConstants.CENTER);
+		txtName.setBounds(156, 366, 136, 27);
+		add(txtName);
+		txtName.setColumns(10);
+		
+		JButton btnLogin = new JButton("\uC785\uC7A5");
+		btnLogin.setForeground(Color.WHITE);
+		btnLogin.setBackground(Color.DARK_GRAY);
+		btnLogin.setFont(new Font("중고딕", Font.PLAIN, 14));
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (txtName.getText() != null && !txtName.getText().equals("")) {
+					new Thread(new Listener(frame)).start();
+				}
+			}
+		});
+		btnLogin.setBounds(156, 403, 136, 27);
+		add(btnLogin);
+		
+		lblProfile = new JLabel(profileImage);
+		lblProfile.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				ProfileFrame profileFrame = new ProfileFrame(frame);
+				profileFrame.setVisible(true);
+			}
+		});
+		lblProfile.setBounds(140, 162, 160, 160);
+		add(lblProfile);
+	}
+	
+	public void changeProfileImage(int index) {
+		profileNum = index;
+		profileImage = getProfileImage();
+		lblProfile.setIcon(profileImage);
+	}
+	
+	private ImageIcon getProfileImage() {
+		return new ImageIcon(new ImageIcon(ProfileFrame.PROFILEPATH + "/profile"+profileNum+".png").getImage().getScaledInstance(160, 160, java.awt.Image.SCALE_SMOOTH));
+	}
+
+	public String getTxtName() {
+		return txtName.getText();
+	}
+
+	public void setTxtName(JTextField txtName) {
+		this.txtName = txtName;
+	}
+	
+	public int getProfileNum() {
+		return profileNum;
+	}
+}

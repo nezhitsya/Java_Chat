@@ -1,0 +1,21 @@
+package prac;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+// 서버
+public class ServerLauncher {
+
+	private static final int PORT = 2367; //지정 포트번호
+	
+	public static void main(String[] args) {
+		
+		try (ServerSocket listener = new ServerSocket(PORT)) {
+			// 소켓에 포트번호 입력
+			while (true) {
+				new Thread(new Handler(listener.accept())).start();
+			}			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

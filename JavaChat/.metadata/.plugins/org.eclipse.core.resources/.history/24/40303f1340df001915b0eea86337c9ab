@@ -1,0 +1,14 @@
+package prac;
+
+import javax.swing.JPanel;
+
+public class just extends JPanel {
+
+	/**
+	 * Create the panel.
+	 */
+	public just() {
+
+	}
+
+}

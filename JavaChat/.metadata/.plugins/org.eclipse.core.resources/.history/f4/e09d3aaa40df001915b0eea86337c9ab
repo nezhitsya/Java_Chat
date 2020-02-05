@@ -1,0 +1,44 @@
+package prac;
+
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+public class just extends JPanel {
+	private JPanel panel;
+	/**
+	 * Create the panel.
+	 */
+	public just() {
+		setLayout(null);
+		
+		JLabel lblClose = new JLabel("X");
+		lblClose.setFont(new Font("HYΩ≈∏Ì¡∂", Font.BOLD, 20));
+		lblClose.setHorizontalAlignment(SwingConstants.CENTER);
+		lblClose.setBounds(833, 10, 55, 55);
+		add(lblClose);
+		lblClose.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				System.exit(0);
+			}
+		});
+	}
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					just window = new just();
+					window.panel.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+}

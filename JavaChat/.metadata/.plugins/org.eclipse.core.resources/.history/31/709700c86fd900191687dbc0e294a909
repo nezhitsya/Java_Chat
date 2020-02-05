@@ -1,0 +1,15 @@
+package prac;
+import javax.swing.JFrame;
+
+public class Login extends JFrame {
+	public Login() {
+		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(600,400);
+		setLocationRelativeTo(null);
+		setResizable(false);
+	}
+	public static void main(String args[]) {
+		new Login();
+	}
+}

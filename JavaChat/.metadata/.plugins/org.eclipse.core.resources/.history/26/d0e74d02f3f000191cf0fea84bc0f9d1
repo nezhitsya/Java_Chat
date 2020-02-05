@@ -1,0 +1,482 @@
+package prac;
+
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.JTextPane;
+import javax.swing.JTextArea;
+// 메인 프레임
+public class Design {
+
+	private JFrame frame;
+	private JTextField IDtxt;
+	private JTextField PWtxt;
+	private JTextField txtName;
+	private JTextField txtidc;
+	private JTextField txtpsw;
+	
+	private JInternalFrame Profile;
+
+	BufferedReader in;
+	OutputStream out;
+	   
+	String selectedRoom;
+	private JTextField txtFname;
+	private JTextField textField;
+	private JPasswordField chpsw;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Design window = new Design();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	
+	public Design() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		Customer customer = new Customer();
+		frame = new JFrame();
+		frame.setUndecorated(true);
+		frame.setBackground(Color.WHITE);
+		frame.setForeground(Color.WHITE);
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\i\\Desktop\\JAVA\\Project2\\prac\\Image\\iconfinder_Telegram_2460228.png"));
+		frame.setResizable(false); //크기 조정 불가
+		frame.setBounds(100, 100, 850, 550);
+		frame.setTitle("DaY Talk");
+		frame.setLocationRelativeTo(null); //항상 가운데 등장
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		Profile = new AppFrame();
+		Profile.setBounds(414, 41, 436, 509);
+		frame.getContentPane().add(Profile);
+		Profile.setBackground(new Color(248, 248, 255));
+		Profile.setVisible(false);
+		Profile.getContentPane().setLayout(null);
+		
+		JPanel Bar = new JPanel();
+		Bar.setBounds(0, 0, 850, 42);
+		Bar.setBackground(new Color(153, 153, 204));
+		frame.getContentPane().add(Bar);
+		Bar.setLayout(null);
+		
+		JLabel lblExit = new JLabel("X");
+		lblExit.setHorizontalAlignment(SwingConstants.CENTER);
+		lblExit.setBounds(803, 10, 35, 35);
+		lblExit.setFont(new Font("맑은 고딕", Font.PLAIN, 25));
+		Bar.add(lblExit);
+		lblExit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				System.exit(0);
+			}
+		});
+		
+		JLabel lblDown = new JLabel("\u3161");
+		lblDown.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDown.setFont(new Font("맑은 고딕", Font.PLAIN, 25));
+		lblDown.setBounds(768, 10, 35, 35);
+		Bar.add(lblDown);
+		lblDown.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				frame.setState(JFrame.ICONIFIED);
+			}
+		});
+		
+		JPanel Main = new JPanel();
+		Main.setBounds(0, 0, 416, 550);
+		Main.setBackground(new Color(153, 153, 204));
+		frame.getContentPane().add(Main);
+		Main.setLayout(null);
+
+		JPanel LogIn = new JPanel();
+		LogIn.setBounds(414, 41, 436, 509);
+		frame.getContentPane().add(LogIn);
+		LogIn.setBackground(new Color(153, 153, 204));
+		LogIn.setLayout(null);
+		
+		JButton btnLogIn = new JButton("\uB85C\uADF8\uC778");
+		btnLogIn.setBackground(new Color(204, 204, 255));
+		btnLogIn.setBounds(119, 382, 240, 45);
+		btnLogIn.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+		LogIn.add(btnLogIn);
+		btnLogIn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent arg0) {
+				try {
+					Connection con = customer.getConnection();
+					String name = IDtxt.getText();
+					String pasw = PWtxt.getText();
+					
+					String query = "SELECT * FROM customer WHERE id = ? and pass = ?";
+					PreparedStatement statement = con.prepareStatement(query);
+					statement.setString(1, name);
+					statement.setString(2, pasw);
+				
+					ResultSet set=statement.executeQuery();
+					if(set.next()) {
+						JOptionPane.showMessageDialog(null, "로그인 되었습니다.");
+						LogIn.setVisible(false);
+						Profile.setVisible(true);
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "아이디 및 비밀번호를 다시 확인해주세요.");
+					}
+				} catch(Exception e) {
+					System.out.println(e.getMessage());
+					return;
+				}
+			}
+		});
+		
+		IDtxt = new JTextField();
+		IDtxt.setBounds(119, 274, 240, 40);
+		IDtxt.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+		IDtxt.setText("\uC544\uC774\uB514");
+		LogIn.add(IDtxt);
+		IDtxt.setColumns(10);
+		
+		PWtxt = new JPasswordField(10);
+		PWtxt.setText("\uBE44\uBC00\uBC88\uD638");
+		PWtxt.setBounds(119, 324, 240, 40);
+		PWtxt.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+		LogIn.add(PWtxt);
+		PWtxt.setColumns(10);
+		JButton Signbtn = new JButton("\uD68C\uC6D0\uAC00\uC785");
+		Signbtn.setBackground(new Color(204, 204, 255));
+		Signbtn.setBounds(119, 437, 114, 36);
+		LogIn.add(Signbtn);
+		Signbtn.setFont(new Font("맑은 고딕", Font.PLAIN, 17));
+		
+		JButton bntFind = new JButton("\uACC4\uC815\uCC3E\uAE30");
+		bntFind.setBackground(new Color(204, 204, 255));
+		bntFind.setFont(new Font("맑은 고딕", Font.PLAIN, 17));
+		bntFind.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		bntFind.setBounds(245, 437, 114, 36);
+		LogIn.add(bntFind);
+		
+		JLabel lblId = new JLabel("ID");
+		lblId.setHorizontalAlignment(SwingConstants.CENTER);
+		lblId.setFont(new Font("맑은 고딕", Font.ITALIC, 18));
+		lblId.setBounds(55, 279, 52, 28);
+		LogIn.add(lblId);
+		
+		JLabel lblPw = new JLabel("PW");
+		lblPw.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPw.setFont(new Font("맑은 고딕", Font.ITALIC, 18));
+		lblPw.setBounds(55, 329, 52, 28);
+		LogIn.add(lblPw);
+		
+		JLabel lblDayTalk = new JLabel("DaY Talk");
+		lblDayTalk.setBounds(91, 94, 191, 61);
+		Main.add(lblDayTalk);
+		lblDayTalk.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDayTalk.setFont(new Font("휴먼명조", Font.BOLD | Font.ITALIC, 35));
+		
+		JPanel Setting = new JPanel();
+		Setting.setBounds(414, 41, 436, 509);
+		frame.getContentPane().add(Setting);
+		Setting.setBackground(new Color(230, 230, 250));
+		Setting.setLayout(null);
+		
+		Setting.setVisible(false);
+		
+		JLabel Name = new JLabel("\uC774 \uB984");
+		Name.setHorizontalAlignment(SwingConstants.CENTER);
+		Name.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+		Name.setBounds(41, 105, 69, 39);
+		Setting.add(Name);
+		
+		txtName = new JTextField();
+		txtName.setBounds(134, 112, 131, 32);
+		Setting.add(txtName);
+		txtName.setColumns(10);
+		
+		JLabel label = new JLabel("\uC544 \uC774 \uB514");
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+		label.setBounds(41, 203, 69, 39);
+		Setting.add(label);
+		
+		txtidc = new JTextField();
+		txtidc.setColumns(10);
+		txtidc.setBounds(134, 210, 154, 32);
+		Setting.add(txtidc);
+		
+		JLabel label_1 = new JLabel("\uBE44\uBC00\uBC88\uD638");
+		label_1.setHorizontalAlignment(SwingConstants.CENTER);
+		label_1.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+		label_1.setBounds(41, 252, 69, 39);
+		Setting.add(label_1);
+		
+		txtpsw = new JPasswordField();
+		txtpsw.setColumns(10);
+		txtpsw.setBounds(134, 259, 190, 32);
+		Setting.add(txtpsw);
+		
+		JComboBox gendertxt = new JComboBox(new String[] {"Female","Male"});
+		gendertxt.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
+		gendertxt.setBackground(new Color(255, 255, 255));
+		gendertxt.setBounds(134, 154, 99, 39);
+		Setting.add(gendertxt);
+		
+		JLabel label_2 = new JLabel("\uC131 \uBCC4");
+		label_2.setHorizontalAlignment(SwingConstants.CENTER);
+		label_2.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+		label_2.setBounds(41, 154, 69, 39);
+		Setting.add(label_2);
+		
+		JButton btnSign = new JButton("\uD655 \uC778");
+		btnSign.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String name = txtName.getText();
+				String gender = gendertxt.getSelectedItem().toString();
+				String id = txtidc.getText();
+				String pass = txtpsw.getText();
+				customer.createCustomer(name,id,pass,gender);
+				JOptionPane.showMessageDialog(null,"회원가입이 완료되었습니다.");
+				
+				Setting.setVisible(false);
+				LogIn.setVisible(true);
+			}
+		});
+		btnSign.setBackground(new Color(248, 248, 255));
+		btnSign.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
+		btnSign.setBounds(156, 460, 121, 39);
+		Setting.add(btnSign);
+
+		String regExp="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)(?=\\S+$).{8,20}$";
+		
+		String chpass = txtpsw.getText();
+		JButton chpswbtn = new JButton("확 인");
+		chpswbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (chpass.matches(regExp)) {
+					JOptionPane.showMessageDialog(null, chpass+"유효한 비밀번호 입니다.");
+				} else {
+					JOptionPane.showMessageDialog(null, "숫자,대문자,특수문자를 하나 이상 추가해 주세요.");
+				}
+			}
+		});
+		chpswbtn.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+		chpswbtn.setBackground(new Color(248, 248, 255));
+		chpswbtn.setBounds(336, 252, 79, 39);
+		Setting.add(chpswbtn);
+		
+		JLabel label_3 = new JLabel("\uD68C \uC6D0 \uAC00 \uC785");
+		label_3.setHorizontalAlignment(SwingConstants.CENTER);
+		label_3.setFont(new Font("맑은 고딕", Font.PLAIN, 22));
+		label_3.setBounds(12, 10, 168, 39);
+		Setting.add(label_3);
+		
+		JButton Check = new JButton("중복확인");
+		Check.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					Connection con = customer.getConnection();
+					String IdId = txtidc.getText();
+							
+					String query = "SELECT * FROM customer WHERE id = ?";
+					PreparedStatement statement = con.prepareStatement(query);
+					statement.setString(1, IdId);
+					ResultSet set=statement.executeQuery();
+						if(set.next()) {
+							JOptionPane.showMessageDialog(null, "중복된 아이디 입니다.");
+						}
+						else {
+							JOptionPane.showMessageDialog(null, "사용 가능한 아이디 입니다.");
+						}
+					} catch(Exception e) {
+						System.out.println(e.getMessage());
+						return;
+					}
+				}
+			});
+		
+		Check.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+		Check.setBackground(new Color(248, 248, 255));
+		Check.setBounds(300, 203, 105, 38);
+		Setting.add(Check);
+		
+		JLabel label_6 = new JLabel("주 소");
+		label_6.setHorizontalAlignment(SwingConstants.CENTER);
+		label_6.setFont(new Font("Dialog", Font.PLAIN, 16));
+		label_6.setBounds(41, 345, 69, 39);
+		Setting.add(label_6);
+		
+		textField = new JTextField();
+		textField.setColumns(10);
+		textField.setBounds(134, 351, 154, 32);
+		Setting.add(textField);
+		
+		JButton button = new JButton("우편번호");
+		button.setFont(new Font("Dialog", Font.PLAIN, 16));
+		button.setBackground(new Color(248, 248, 255));
+		button.setBounds(300, 345, 105, 38);
+		Setting.add(button);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(134, 393, 271, 57);
+		Setting.add(textArea);
+		
+		chpsw = new JPasswordField(30);
+		chpsw.setColumns(10);
+		chpsw.setBounds(134, 301, 190, 32);
+		Setting.add(chpsw);
+		
+		JLabel label_7 = new JLabel("비밀번호 확인");
+		label_7.setHorizontalAlignment(SwingConstants.CENTER);
+		label_7.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+		label_7.setBounds(12, 296, 110, 39);
+		Setting.add(label_7);
+		
+		JPanel Find = new JPanel();
+		Find.setBounds(414, 41, 436, 509);
+		frame.getContentPane().add(Find);
+		Find.setBackground(new Color(230, 230, 250));
+		Find.setLayout(null);
+		Find.setVisible(false);
+		
+		Signbtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent arg0) {
+				Setting.setVisible(true);
+				LogIn.setVisible(false);
+			}
+		});
+		
+		bntFind.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent arg0) {
+				LogIn.setVisible(false);
+				Find.setVisible(true);
+			}
+		});
+		
+		JLabel label_4 = new JLabel("\uACC4 \uC815 \uCC3E \uAE30");
+		label_4.setHorizontalAlignment(SwingConstants.CENTER);
+		label_4.setFont(new Font("맑은 고딕", Font.PLAIN, 22));
+		label_4.setBounds(132, 55, 168, 61);
+		Find.add(label_4);
+		
+		JComboBox boxF = new JComboBox(new String[] {"Female","Male"});
+		boxF.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
+		boxF.setBackground(Color.WHITE);
+		boxF.setBounds(146, 205, 99, 39);
+		Find.add(boxF);
+		
+		JButton Findbnt = new JButton("\uD655 \uC778");
+		Findbnt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Find.setVisible(false);
+				LogIn.setVisible(true);
+			}
+		});
+		Findbnt.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
+		Findbnt.setBackground(new Color(248, 248, 255));
+		Findbnt.setBounds(155, 437, 121, 39);
+		Find.add(Findbnt);
+		
+		Findbnt.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent arg0) {
+				try {
+					Connection con = customer.getConnection();
+					String nam = txtFname.getText();
+					String gend = boxF.getSelectedItem().toString();
+					
+					String query = "SELECT id,pass FROM customer WHERE name=? and gender=?";
+					PreparedStatement statement = con.prepareStatement(query);
+					statement.setString(1, nam);
+					statement.setString(2, gend);
+					ResultSet results = statement.executeQuery();
+					ArrayList<String> list = new ArrayList<String>();
+					while(results.next()) {
+						list.add(" ID : "+results.getString("id")+
+								" Password : "+results.getString("pass"));
+					}
+				
+					ResultSet set=statement.executeQuery();
+					if(set.next()) {
+						JOptionPane.showMessageDialog(null,  list + " 입니다.");
+						LogIn.setVisible(true);
+						Find.setVisible(false);
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "개인 정보를 다시 확인해주세요.");
+					}
+				} catch(Exception e) {
+					System.out.println(e.getMessage());
+					return;
+				}
+			}
+		});
+		
+		JLabel label_5 = new JLabel("\uC774 \uB984");
+		label_5.setHorizontalAlignment(SwingConstants.CENTER);
+		label_5.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+		label_5.setBounds(41, 151, 69, 39);
+		Find.add(label_5);
+		
+		txtFname = new JTextField();
+		txtFname.setColumns(10);
+		txtFname.setBounds(136, 158, 190, 32);
+		Find.add(txtFname);
+		
+		JLabel label_8 = new JLabel("\uC131 \uBCC4");
+		label_8.setHorizontalAlignment(SwingConstants.CENTER);
+		label_8.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+		label_8.setBounds(41, 200, 69, 39);
+		Find.add(label_8);
+	}
+}

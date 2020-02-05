@@ -1,0 +1,51 @@
+package prac;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+public class Login extends JFrame {
+	public Login() {
+		JPanel panel = new JPanel();
+		JLabel label = new JLabel("ID   ");
+		JLabel psw = new JLabel("Password   ");
+		JTextField txtID = new JTextField(10);
+		JPasswordField txtPass = new JPasswordField(10);
+		JButton logBnt = new JButton("Log In");
+		
+		panel.add(label);
+		panel.add(txtID);
+		panel.add(psw);
+		panel.add(txtPass);
+		panel.add(logBnt);
+		add(panel);
+
+		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(600,400);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		
+		logBnt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String id = "Day";
+				String pass = "1234";
+				if(id.contentEquals(txtID.getText())&&pass.equals(txtPass.getText())) {
+					JOptionPane.showMessageDialog(null, "Welcome");
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Sorry, You failed to log in");
+				}
+			}
+		});
+	}
+	public static void main(String args[]) {
+		new Login();
+	}
+}

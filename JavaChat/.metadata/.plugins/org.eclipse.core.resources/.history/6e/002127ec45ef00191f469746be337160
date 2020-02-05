@@ -1,0 +1,12 @@
+package prac;
+
+public class ClientLauncher {
+
+	public static void main(String[] args) {
+		try {
+			Design frame = new Design();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

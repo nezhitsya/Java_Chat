@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="javax.swing.JFrame"/>
+    <fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+    <fullyQualifiedTypeName name="java.sql.DriverManager"/>
+    <fullyQualifiedTypeName name="java.sql.Connection"/>
+    <fullyQualifiedTypeName name="com.mysql.cj.xdevapi.Statement"/>
+    <fullyQualifiedTypeName name="prac.Message"/>
+    <fullyQualifiedTypeName name="javax.swing.JInternalFrame"/>
+    <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="server.Manager"/>
+    <fullyQualifiedTypeName name="server.ManagerLogin"/>
+    <fullyQualifiedTypeName name="com.sun.tools.javac.jvm.Profile"/>
+    <fullyQualifiedTypeName name="sun.java2d.cmm.Profile"/>
+    <fullyQualifiedTypeName name="prac.Customer"/>
+    <fullyQualifiedTypeName name="java.sql.Date"/>
+    <fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
+    <fullyQualifiedTypeName name="java.util.Calendar"/>
+    <fullyQualifiedTypeName name="server.MemberChange"/>
+    <fullyQualifiedTypeName name="prac.Design"/>
+    <fullyQualifiedTypeName name="prac.LoginPanel"/>
+</qualifiedTypeNameHistroy>
